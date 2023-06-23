@@ -1,6 +1,6 @@
 Test.
 
-# Orca Security - Shift Left Source Code Scan guide
+# Orca Security - Shift Left Source Code Scan guide.
 Orca Security has a capability of DevSecOps - a concept & philosopy of the
 collaborative security improvement framework for the entire SDLS. The repo here
 is a quick demo for your audiences.
