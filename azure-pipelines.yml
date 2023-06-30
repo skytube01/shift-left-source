@@ -1,29 +1,18 @@
-# Docker
-# Build a Docker image
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
 trigger:
-- main
-
-resources:
-- repo: self
+  - main
 
 variables:
-  tag: '$(Build.BuildId)'
+- name: PROJECT_KEY # Set the desired project to run the cli scanning with
+  value: <PROJECT_KEY>
 
-stages:
-- stage: Build
-  displayName: Build image
-  jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - task: Docker@2
-      displayName: Build an image
-      inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: |
-          $(tag)
+pool:
+  vmImage: "ubuntu-latest"
+
+steps:
+  - script: |
+      apt update && apt install -y curl
+      curl -sfL 'https://raw.githubusercontent.com/orcasecurity/orca-cli/main/install.sh' | bash #download installation script
+      orca-cli -p "${PROJECT_KEY}" fs scan "${PWD}"  # Run Orca CLI scan against your IaC code
+    displayName: Orca File System Security Scan
+    env:
+     ORCA_SECURITY_API_TOKEN: $(ORCA_SECURITY_API_TOKEN)
